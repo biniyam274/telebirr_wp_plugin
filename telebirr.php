@@ -28,7 +28,7 @@ function telebirr_install()
   $sql = "CREATE TABLE $table_name (
 		id int(9) NOT NULL AUTO_INCREMENT,
         user_id int(9) NOT NULL,
-        status ENUM ('Pending', 'Approved') DEFAULT 'Pending',
+        status ENUM ('pending', 'approved') DEFAULT 'pending',
 		PRIMARY KEY  (id)
 	) $charset_collate;";
 
