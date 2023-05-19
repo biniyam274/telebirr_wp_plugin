@@ -416,12 +416,11 @@ function telebirr_field_telebirr_subscriptions_table_cb($args)
   foreach($args['label_for'] as $key => $value) { 
     ?>
 <fieldset>
-    <label for="<?php echo esc_attr($key); ?>">Type </label>
-    <input id="<?php echo esc_attr($key); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr($key); ?>]" type='text' value="<?php if (isset($options[$key])) echo ($options[$key]); ?>" />
-    <label for="<?php echo esc_attr($value); ?>">Price</label>
-    <input id="<?php echo esc_attr($value); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr($value); ?>]" type='text' value="<?php if (isset($options[$value])) echo ($options[$value]); ?>" />
+    <label for="<?php echo esc_attr("$key"); ?>">Type </label>
+    <input id="<?php echo esc_attr("$key"); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr("$key"); ?>]" type='text' value="<?php if (isset($options["$key"])) echo ($options["$key"]); ?>" />
+    <label for="<?php echo esc_attr("$value"); ?>">Price</label>
+    <input id="<?php echo esc_attr("$value"); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr("$value"); ?>]" type='text' value="<?php if (isset($options["$value"])) echo ($options["$value"]); ?>" />
   </fieldset>
-
     <?php
   }
 }
@@ -470,9 +469,10 @@ function telebirr_field_telebirr_users_table_cb($args)
           <tbody>
           ';
       foreach ($users as $user) {
+        $payment = $wpdb->get_col("SELECT status FROM {$wpdb->prefix}telebirr WHERE user_id ='$user->ID'");
         $html .= '<tr class="item_row">';
         $html .= '<td>' . $user->display_name . '</td>';
-        $html .= '<td>Approved</td>';
+        $html .= "<td> $payment[0] </td>";
         $html .= '</tr>';
       }
       $html .= '
