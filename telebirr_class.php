@@ -21,8 +21,6 @@ class TelebirrClass
 
 	function __construct(
 		
-		$timeoutExpress,
-		$receiveName,
 		$totalAmount,
 		$notifyUrl,
 		$returnUrl,
@@ -37,8 +35,8 @@ class TelebirrClass
 		$this->shortCode = $options['telebirr_field_api_shortcode'];
 		$this->notifyUrl = $notifyUrl;
 		$this->returnUrl = $returnUrl;
-		$this->timeoutExpress = $timeoutExpress;
-		$this->receiveName = $receiveName;
+		$this->timeoutExpress = (int)$options['telebirr_field_qr_timeout'];
+		$this->receiveName = $options['telebirr_field_reciver_name'];
 		$this->totalAmount = $totalAmount;
 		$this->subject = $subject;
 	}
@@ -102,7 +100,6 @@ class TelebirrClass
 			'sign' => $sign,
 			'ussd' => $ussd
 		];
-
 		$curl = curl_init($this->api);
 		curl_setopt($curl, CURLOPT_URL, $this->api);
 		curl_setopt($curl, CURLOPT_POST, true);
@@ -125,11 +122,7 @@ class TelebirrClass
 		curl_close($curl);
 		// var_dump($resp);
 		
-		
-		$decode = json_decode($resp, true);
-		$topayUrl = $decode;
-		
-		return $topayUrl;
+		return json_decode($resp, true);
 	}
 
 	/**

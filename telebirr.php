@@ -162,8 +162,13 @@ function telebirr_payment_form()
   $options = get_option('telebirr_options');
   for($i = 1; $i <= 3; $i++) { 
     $isChecked = $i == 1?"checked":""; 
-    $subscription .= '<div style=" display:inline;"> <input type="radio" value="'.$i.'" name="subscription" '. $isChecked.' >  <span> '. $options['key'.$i]."( ".$options['value'.$i]." )".' </span> </div>';
+    $subscription .= '
+    <div style=" display:inline;"> 
+    <input id="child'.$i.'" type="radio" value="'.$i.'" name="subscription" '. $isChecked.' >
+    <label for="child'.$i.'">'. $options['key'.$i]."( ".$options['value'.$i]." )".'</label><br>
+    </div>';
    }
+   
   $html .= '
     <div class="telebirr-container">
   <div class="brand-logo"></div>
@@ -192,7 +197,7 @@ function telebirr_payment_form_shortcode()
   return $html;
 }
 
-add_shortcode('telebirr_payment_form_shortcode', 'telebirr_payment_form_shortcode');
+add_shortcode('telebirr_payment_shortcode', 'telebirr_payment_form_shortcode');
 
 //  Setting Section
 
@@ -280,6 +285,41 @@ function telebirr_settings_init()
       'telebirr_custom_data' => 'custom',
     )
   );
+
+
+    // Register a new field in the "telebirr_section_developers" section, inside the "telebirr" page.
+    add_settings_field(
+      'telebirr_field_reciver_name', // As of WP 4.6 this value is used only internally.
+      // Use $args' label_for to populate the id inside the callback.
+      __('Reciver Name', 'telebirr'),
+      'telebirr_field_reciver_name_cb',
+      'telebirr',
+      'telebirr_section_developers',
+      array(
+        'label_for'         => 'telebirr_field_reciver_name',
+        'class'             => 'telebirr_row',
+        'telebirr_custom_data' => 'custom',
+      )
+    );
+
+
+    
+    // Register a new field in the "telebirr_section_developers" section, inside the "telebirr" page.
+    add_settings_field(
+      'telebirr_field_qr_timeout', // As of WP 4.6 this value is used only internally.
+      // Use $args' label_for to populate the id inside the callback.
+      __('QR Code Timeout', 'telebirr'),
+      'telebirr_field_qr_timeout_cb',
+      'telebirr',
+      'telebirr_section_developers',
+      array(
+        'label_for'         => 'telebirr_field_qr_timeout',
+        'class'             => 'telebirr_row',
+        'telebirr_custom_data' => 'custom',
+      )
+    );
+
+
 
   // Register a new field in the "telebirr_section_developers" section, inside the "telebirr" page.
   add_settings_field(
@@ -437,6 +477,35 @@ function telebirr_field_api_key_cb($args)
   <input id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr($args['label_for']); ?>]" type='text' value="<?php if (isset($options[$args['label_for']])) echo ($options[$args['label_for']]); ?>" />
 <?php
 }
+
+
+
+/**
+ * @param array $args
+ */
+function telebirr_field_reciver_name_cb($args)
+{
+  // Get the value of the setting we've registered with register_setting()
+  $options = get_option('telebirr_options');
+?>
+  <input id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr($args['label_for']); ?>]" type='text' value="<?php if (isset($options[$args['label_for']])) echo ($options[$args['label_for']]); ?>" />
+<?php
+}
+
+
+/**
+ * @param array $args
+ */
+function telebirr_field_qr_timeout_cb($args)
+{
+  // Get the value of the setting we've registered with register_setting()
+  $options = get_option('telebirr_options');
+?>
+  <input id="<?php echo esc_attr($args['label_for']); ?>" data-custom="<?php echo esc_attr($args['telebirr_custom_data']); ?>" name="telebirr_options[<?php echo esc_attr($args['label_for']); ?>]" type='text' value="<?php if (isset($options[$args['label_for']])) echo ($options[$args['label_for']]); ?>" />
+<?php
+}
+
+
 
 
 
@@ -612,3 +681,6 @@ function telebirr_options_page_html()
 
 register_activation_hook(__FILE__, 'telebirr_install');
 register_deactivation_hook(__FILE__, 'telebirr_uninstall');
+
+
+?>

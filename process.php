@@ -25,9 +25,10 @@ if (is_user_logged_in()) {
                 }
                 $telebirr = new TelebirrClass(20, $current_user->display_name, $amount, plugin_dir_url((__FILE__)) . "process_telebirr.php?id=$wpdb->insert_id", get_home_url(), $paymentFor);
                 $data = $telebirr->getPyamentUrl();
-                $newData = $data['data'];
-                $url = $newData['toPayUrl'];
-                wp_redirect($url);
+                echo($data);
+                // $newData = $data['data'];
+                // $url = $newData['toPayUrl'];
+                // wp_redirect($url);
             } catch (\Throwable $th) {
                 print_r($th->getMessage());
             }
